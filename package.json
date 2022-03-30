@@ -1,0 +1,30 @@
+{
+  "name": "bike-rentat-service-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AshutoshFreak/bike-rental-service-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AshutoshFreak/bike-rental-service-backend/issues"
+  },
+  "homepage": "https://github.com/AshutoshFreak/bike-rental-service-backend#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "knex": "^1.0.4",
+    "moment": "^2.29.1",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

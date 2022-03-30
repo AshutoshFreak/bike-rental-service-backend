@@ -1,27 +1,21 @@
-const http = require('http')
-const fs = require('fs')
-const port = 3000
+require("dotenv").config({path: "./.env" });
+const express = require("express");
+const app = express();
+const {AddBike} = require("./db/db");
 
-const server = http.createServer(function(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'})
-    fs.readFile('index.html', function(error, data) {
-        if(error) {
-            res.writeHead(404)
-            res.write('Error: File Not Found')
-        }
-        else {
-            res.write(data)
-        }
-    res.end()
-    })
-})
 
-server.listen(port, function(error){
-  if (error) {
-    console.log('Something went wront', error)
-  }
-  else {
-    console.log('Server is listening on port: ' + port)
-  }
-})
+app.use(express.json());
 
+
+// Add Bike endpoint
+require("./routes/AddBike")(app);
+
+
+app.get("/", (req, res) => {
+  res.send("Welcome to briefly - URL shortener!");
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`listening on port ` + port);
+});
