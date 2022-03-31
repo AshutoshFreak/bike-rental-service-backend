@@ -1,5 +1,6 @@
-const knex=require('knex')
-const knexfile=require('./knexfile')
+const knex=require('knex');
+const knexfile=require('./knexfile');
+const moment = require('moment');
 
 const db=knex(knexfile.development);
 module.exports=db;
@@ -29,13 +30,41 @@ const AddDockedBike = async (bike) => {
     
   };
 
-  const getAvailableBikes = async() => {
+  const getAvailableBikes = async(station) => {
     return db
       .from('Bikes')
-      .select('BikeId','LastStationDocked')
+      .select('BikeId')
       .where('BikeStatus',0)
+      .andWhere('LastStationDocked',station)
       .returning("*")
-      .then(rows => rows);
+      .then(rows => {
+        return rows[0];
+      });
+  }
+
+
+  const changeBikeStatus = async(bikeid) => {
+        return db
+      .from('Bikes')
+      .returning("*")
+      .where('BikeId',bikeid)
+      .update('BikeStatus',1)
+      .then(rows => {
+        return rows[0];
+      });
+
+  }
+
+  const StartTrip = async(userid,bikeid,stationid) => {
+        let dateStr = moment().utcOffset("+05:30").format();
+        trip={UserId:userid,BookedAtStation:stationid,BikeBooked:bikeid,StartTime:dateStr,TripStatus:1}
+        return db
+        .insert(trip)
+        .into("Trips")
+        .returning("*")
+        .then(rows => {
+          return rows[0];
+      });
   }
 
   const checkEmail = async(email)=>{
@@ -58,5 +87,7 @@ const AddDockedBike = async (bike) => {
     AddBike,
     AddDockedBike,
     getAvailableBikes,
-    checkEmail
+    checkEmail,
+    changeBikeStatus,
+    StartTrip
   };
