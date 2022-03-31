@@ -30,6 +30,16 @@ const AddDockedBike = async (bike) => {
     
   };
 
+  const checkUserBookStatus = async(userid) =>{
+      return db
+      .from('Trips')
+      .select('BikeBooked')
+      .where('UserId',userid)
+      .andWhere('TripStatus',1)
+      .then(rows => {
+        return rows.length;
+      });
+  }
   const getAvailableBikes = async(station) => {
     return db
       .from('Bikes')
@@ -86,6 +96,7 @@ const AddDockedBike = async (bike) => {
   module.exports = {
     AddBike,
     AddDockedBike,
+    checkUserBookStatus,
     getAvailableBikes,
     checkEmail,
     changeBikeStatus,

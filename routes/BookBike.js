@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const app = express();
-const {AddBike, AddDockedBike, getAvailableBikes, changeBikeStatus, StartTrip} = require("../db/db");
+const {AddBike, AddDockedBike, getAvailableBikes, changeBikeStatus, StartTrip, checkUserBookStatus} = require("../db/db");
 const moment = require('moment');
 
 
@@ -12,14 +12,23 @@ module.exports = function (app) {
     station = req.body.stationid;
     user=req.body.userid;
     
-    const id=await getAvailableBikes(station); 
-    if (id!==undefined){
-    console.log(id)
-    await changeBikeStatus(id['BikeId']);
-    await StartTrip(user,id['BikeId'],station) ;
-    res.status(200).send(id);
+    const userhasbooked = await checkUserBookStatus(user);
+    if(userhasbooked==0){
+
+    
+        const id=await getAvailableBikes(station); 
+        if (id!==undefined){
+        console.log(id)
+        await changeBikeStatus(id['BikeId']);
+        await StartTrip(user,id['BikeId'],station) ;
+        res.status(200).send(id);
+        }else{
+            res.status(200).send("No Bikes Available")
+        }
+    
+
     }else{
-        res.status(200).send("No Bikes Available")
+        res.send("User has already booked a bike");
     }
   })
 
