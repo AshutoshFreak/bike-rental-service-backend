@@ -9,10 +9,10 @@ app.use(express.json());
 
 // Add Bike endpoint
 require("./routes/AddBike")(app);
-
+require("./routes/Login")(app);
 
 app.get("/", (req, res) => {
-  res.send("Welcome to briefly - URL shortener!");
+  res.send("Welcome to Bike Rental Service");
 });
 
 const port = process.env.PORT || 3000;

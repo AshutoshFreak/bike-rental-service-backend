@@ -38,9 +38,25 @@ const AddDockedBike = async (bike) => {
       .then(rows => rows);
   }
 
+  const checkEmail = async(email)=>{
+    return db.select("EmailId")
+    .from("Users")
+    .where("EmailId", email)
+    .then(emailList => {
+        if (emailList.length === 0) {
+            return false;
+        }else{
+            return true;
+        }
+    
+    
+});
+  }
+
   
   module.exports = {
     AddBike,
     AddDockedBike,
-    getAvailableBikes
+    getAvailableBikes,
+    checkEmail
   };
