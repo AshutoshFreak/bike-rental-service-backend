@@ -91,13 +91,115 @@ const checkEmail = async(email)=>{
 
 const getTripID = async(userID) => {
   return db
+  .from('Users')
+  .select('TripID')
+  .where('UserID',userID);
+}
+
+const deleteTripIDFromUsers = async(userID) => {
+  return db
+  .from('Users')
+  .where('UserID', '=', userID)
+  .update({
+    'TripID':null
+  })
+}
+
+const getBikeID = async(tripID) => {
+  return db
+  .from('Trips')
+  .select('BikeID')
+  .where('TripID', '=', tripID)
+}
+
+const enterLastStationDocked = async(bikeID, stationID) => {
+  return db
   .from('Bikes')
-  .returning("*")
-  .where('BikeId',bikeid)
-  .update('BikeStatus',status)
-  .then(rows => {
-    return rows[0];
-  });
+  .where('BikeID', '=', bikeID)
+  .update({
+    'LastStationDocked':stationID
+  })
+}
+
+const enterLastStationDockedTimestamp = async(bikeID, dateStr) => {
+  return db
+  .from('Bikes')
+  .where('BikeID', '=', bikeID)
+  .update({
+    'LastStationDockedTimestamp':stationID
+  })
+}
+
+const enterDockingTime = async(bikeID, dateStr) => {
+  return db
+  .from('DockedBikes')
+  .where('BikeID', '=', bikeID)
+  .update({
+    'DockingTime':dateStr
+  })
+}
+
+const enterDockedBy = async(bikeID, userID) => {
+  return db
+  .from('DockedBikes')
+  .where('BikeID', '=', bikeID)
+  .update({
+    'UserID':userID
+  })
+}
+
+const enterStationID = async(bikeID, stationID) => {
+  return db
+  .from('DockedBikes')
+  .where('BikeID', '=', bikeID)
+  .update({
+    'StationID':stationID
+  })
+}
+
+const enterToLocation = async(tripID, stationID) => {
+  return db
+  .from('Trips')
+  .where('TripID', '=', tripID)
+  .update({
+    'ToLocation':stationID
+  })
+}
+
+const enterEndtime = async(tripID, dateStr) => {
+  return db
+  .from('Trips')
+  .where('TripID', '=', tripID)
+  .update({
+    'Endtime':dateStr
+  })
+}
+
+const enterTripStatus = async(tripID, tripStatus) => {
+  return db
+  .from('Trips')
+  .where('TripID', '=', tripID)
+  .update({
+    'TripStatus':tripStatus
+  })
+}
+
+const enterJourneyBill = async(tripID, journeyBill) => {
+  return db
+  .from('Trips')
+  .where('TripID', '=', tripID)
+  .update({
+    'JourneyBill':journeyBill
+  })
+}
+
+const enterPaymentStatus = async(tripID, paymentStatus) => {
+  return db
+  .from('Trips')
+  .where('TripID', '=', tripID)
+  .update({
+    'PaymentStatus':paymentStatus
+  })
 }
 
 

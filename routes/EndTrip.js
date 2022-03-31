@@ -1,11 +1,12 @@
 import { calculateJourneyBill } from "../utils/billing";
+import { lockBike } from "./LockBike";
 require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const app = express();
 const {checkUserBookStatus, getTripID, deleteTripIDFromUsers, getBikeID,
         changeBikeStatus, enterLastStationDocked, enterLastStationDockedTimestamp,
         enterDockingTime, enterDockedBy, enterStationID, enterToLocation, 
-        enterEndtime, changeTripStatus, enterJourneyBill, enterPaymentStatus, expirePassword} = require("../db/db");
+        enterEndtime, changeTripStatus, enterJourneyBill, enterPaymentStatus} = require("../db/db");
 const moment = require('moment');
 
 
@@ -51,7 +52,7 @@ module.exports = function (app) {
 
         // in SessionsPassword table
         // password should expire after trip has ended
-        expirePassword(tripID);
+        // expirePassword(tripID);
 
         // lock the bike after trip has ended
         lockBike(bikeID);
