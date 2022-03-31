@@ -55,6 +55,20 @@ catch(err)
 }
 })
 
+app.get("/endTrip",async(req,res)=>{
+    try{
+        const a=await pool.query('Select * from "Bikes" where "BikeStatus"=1 and "LastStationDocked"=$1 limit 1',[req.body.stationid])
+        console.log(a.rows[0].BikeId);
+        await pool.query(' UPDATE "Bikes" SET "BikeStatus"=0 where "BikeId"=$1',[a.rows[0].BikeId]);
+        await pool.query(
+            'INSERT INTO "Trips" ("TripId","UserId","BikeBooked")  VALUES ($1, $2,$3)', [req.body.TripId, req.body.UserId,a.rows[0].BikeId]); 
+    }
+    catch(err)
+    {
+        console.log(err.message);
+    }
+    })
+
 app.listen(5000,()=>{
 console.log('server is listening on port 5000');
 

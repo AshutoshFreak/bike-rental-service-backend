@@ -1,0 +1,3 @@
+function lockBike(bikeID) {
+    // pass
+}

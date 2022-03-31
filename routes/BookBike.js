@@ -19,7 +19,7 @@ module.exports = function (app) {
         const id=await getAvailableBikes(station); 
         if (id!==undefined){
         console.log(id)
-        await changeBikeStatus(id['BikeId']);
+        await changeBikeStatus(id['BikeId'], 1);
         await StartTrip(user,id['BikeId'],station) ;
         res.status(200).send(id);
         }else{
