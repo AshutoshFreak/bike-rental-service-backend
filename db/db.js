@@ -52,6 +52,18 @@ const AddDockedBike = async (bike) => {
       });
   }
 
+  const getBookedBike = async(userid) => {
+    return db
+      .from('Trips')
+      .select('BikeBooked')
+      .where('UserId',userid)
+      .andWhere('TripStatus',1)
+      .returning("*")
+      .then(rows => {
+        return rows[0];
+      });
+  }
+
 
   const changeBikeStatus = async(bikeid) => {
         return db
@@ -77,6 +89,42 @@ const AddDockedBike = async (bike) => {
       });
   }
 
+  const EndTrip = async(userid,stationid) => {
+    let dateStr = moment().utcOffset("+05:30").format();
+
+    return db
+      .from('Trips')
+      .returning("*")
+      .where('UserId',userid)
+      .andWhere('TripStatus',1)
+      .update('TripStatus',2)
+      .update('EndTime',dateStr)
+      .update('JourneyBill',10)
+      .update('PaymentStatus',1)
+      .then(rows => {
+        return rows[0];
+    
+
+  });
+}
+
+const DockBike = async(bikeid,stationid) => {
+  let dateStr = moment().utcOffset("+05:30").format();
+
+  return db
+    .from('Bikes')
+    .returning("*")
+    .where('BikeId',bikeid)
+    .update('BikeStatus',0)
+    .update('LastStationDocked',stationid)
+    .update('LastStationDockedTimestamp',dateStr)
+    .then(rows => {
+      return rows[0];
+  
+
+});
+}
+
   const checkEmail = async(email)=>{
     return db.select("EmailId")
     .from("Users")
@@ -98,7 +146,10 @@ const AddDockedBike = async (bike) => {
     AddDockedBike,
     checkUserBookStatus,
     getAvailableBikes,
-    checkEmail,
+    getBookedBike,
     changeBikeStatus,
-    StartTrip
+    StartTrip,
+    EndTrip,
+    DockBike,
+    checkEmail
   };
