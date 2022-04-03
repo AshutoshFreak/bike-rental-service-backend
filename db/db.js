@@ -140,6 +140,15 @@ const DockBike = async(bikeid,stationid) => {
 });
   }
 
+  const getBikesCount =async()=>{
+    return db
+    .from('Bikes')
+    .select('LastStationDocked')
+    .where('BikeStatus',0)
+    .groupBy('LastStationDocked')
+    .count()
+  }
+
   
   module.exports = {
     AddBike,
@@ -151,5 +160,6 @@ const DockBike = async(bikeid,stationid) => {
     StartTrip,
     EndTrip,
     DockBike,
-    checkEmail
+    checkEmail,
+    getBikesCount
   };
