@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const app = express();
-const {AddBike, AddDockedBike, getAvailableBikes, changeBikeStatus, StartTrip, checkUserBookStatus,teststamp} = require("../db/db");
+const {AddBike, AddDockedBike, getAvailableBikes, changeBikeStatus, StartTrip, checkUserBookStatus,checkBikeAvailability,EnterUserTrip,getBikeLocation} = require("../db/db");
 const moment = require('moment');
 const {TimeDiffInHours} = require('../utils/TimeDiff')
 
@@ -9,25 +9,26 @@ const {TimeDiffInHours} = require('../utils/TimeDiff')
 // shorturl creation endpoint
 module.exports = function (app) {
   app.post("/book-bike", async (req, res) => {
-    station = req.body.stationid;
-    user=req.body.userid;
+    bikeID = req.body.bikeid;
+    userID=req.body.userid;
     
-    const userhasbooked = await checkUserBookStatus(user);
+    const userhasbooked = await checkUserBookStatus(userID);
     if(userhasbooked==0){
 
-      const id=await getAvailableBikes(station); 
-      if (id!==undefined){
-        console.log(id)
-        await changeBikeStatus(id['BikeId'], 1);
-        await StartTrip(user,id['BikeId'],station) ;
-        res.status(200).send(id);
+      const bike_booked=await checkBikeAvailability(bikeID); 
+      if (bike_booked==0){
+        let stationID=await getBikeLocation(bikeID);
+        await changeBikeStatus(bikeID, 1);
+        tripID=await StartTrip(userID,bikeID,stationID);
+        await EnterUserTrip(userID,tripID);
+        res.status(200).send("Bike Booked");
         }else{
-            res.status(200).send("No Bikes Available")
+            res.status(200).send("Bike Not Available")
         }
     
 
     }else{
-        res.send("User has already booked a bike");
+        res.status(200).send("User has already booked a bike");
     }
   })
 

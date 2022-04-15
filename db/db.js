@@ -32,13 +32,40 @@ const AddDockedBike = async (bike) => {
 
 const checkUserBookStatus = async(userid) =>{
     return db
-    .from('Trips')
-    .select('BikeBooked')
+    .from('UserTrips')
+    .select('TripId')
     .where('UserId',userid)
-    .andWhere('TripStatus',1)
     .then(rows => {
-      return rows.length;
+      if(rows.length==0){
+        return 0;
+      }else{
+        if(rows[0]['TripId']==null){
+          return 0;
+        }else{
+          return 1;
+        }
+      }
     });
+}
+
+const checkBikeAvailability = async(bikeid) =>{
+    return db
+    .from('Bikes')
+    .select('BikeStatus')
+    .where('BikeId',bikeid)
+    .then(rows => {
+      return rows[0]['BikeStatus']
+    });
+}
+
+const getBikeLocation = async(bikeid) =>{
+  return db
+  .from('Bikes')
+  .select('LastStationDocked')
+  .where('BikeId',bikeid)
+  .then(rows => {
+    return rows[0]['LastStationDocked']
+  });
 }
 
 const getAvailableBikes = async(station) => {
@@ -51,6 +78,22 @@ const getAvailableBikes = async(station) => {
     .then(rows => {
       return rows[0];
     });
+}
+
+const EnterUserTrip = async(userid,tripid) => {
+  return db
+  .from('UserTrips')
+  .returning("*")
+  .where('UserId',userid)
+  .update('TripId',tripid)
+  .then(rows => {
+    if (rows.length==0){
+      return db
+      .insert({'UserId':userid,'TripId':tripid})
+      .into("UserTrips")
+      .returning("*")
+    }
+  });
 }
 
 const changeBikeStatus = async(bikeid, status) => {
@@ -72,7 +115,7 @@ const StartTrip = async(userid,bikeid,stationid) => {
       .into("Trips")
       .returning("*")
       .then(rows => {
-        return rows[0];
+        return rows[0]['TripId'];
     });
 }
 
@@ -195,7 +238,10 @@ module.exports = {
   AddBike,
   AddDockedBike,
   checkUserBookStatus,
+  checkBikeAvailability,
+  getBikeLocation,
   getAvailableBikes,
+  EnterUserTrip,
   checkEmail,
   changeBikeStatus,
   StartTrip,
