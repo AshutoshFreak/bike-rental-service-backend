@@ -1,9 +1,9 @@
 require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const app = express();
-const {AddBike, AddDockedBike, getAvailableBikes, changeBikeStatus, StartTrip, checkUserBookStatus} = require("../db/db");
+const {AddBike, AddDockedBike, getAvailableBikes, changeBikeStatus, StartTrip, checkUserBookStatus,teststamp} = require("../db/db");
 const moment = require('moment');
-
+const {TimeDiffInHours} = require('../utils/TimeDiff')
 
 
 // shorturl creation endpoint
@@ -15,9 +15,8 @@ module.exports = function (app) {
     const userhasbooked = await checkUserBookStatus(user);
     if(userhasbooked==0){
 
-    
-        const id=await getAvailableBikes(station); 
-        if (id!==undefined){
+      const id=await getAvailableBikes(station); 
+      if (id!==undefined){
         console.log(id)
         await changeBikeStatus(id['BikeId'], 1);
         await StartTrip(user,id['BikeId'],station) ;

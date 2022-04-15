@@ -91,117 +91,105 @@ const checkEmail = async(email)=>{
 
 const getTripID = async(userID) => {
   return db
-  .from('Users')
-  .select('TripID')
-  .where('UserID',userID);
+  .from('UserTrips')
+  .select('TripId')
+  .where('UserId',userID)
+  .then(rows => {
+    return rows[0];
+  });
 }
 
 const deleteTripIDFromUsers = async(userID) => {
   return db
-  .from('Users')
-  .where('UserID', '=', userID)
-  .update({
-    'TripID':null
-  })
+  .from('UserTrips')
+  .where('UserId',userID)
+  .update('TripId',null);
 }
 
 const getBikeID = async(tripID) => {
   return db
   .from('Trips')
-  .select('BikeID')
-  .where('TripID', '=', tripID)
+  .select('BikeBooked')
+  .where('TripId',tripID)
+  .then(rows => {
+    return rows[0];
+  });
 }
 
-const enterLastStationDocked = async(bikeID, stationID) => {
+const enterLastStationDocked = async(bikeID, stationID,dateStr) => {
   return db
   .from('Bikes')
-  .where('BikeID', '=', bikeID)
-  .update({
-    'LastStationDocked':stationID
-  })
+  .where('BikeId', bikeID)
+  .update('LastStationDocked',stationID)
+  .update('LastStationDockedTimestamp',dateStr)
 }
 
-const enterLastStationDockedTimestamp = async(bikeID, dateStr) => {
-  return db
-  .from('Bikes')
-  .where('BikeID', '=', bikeID)
-  .update({
-    'LastStationDockedTimestamp':stationID
-  })
-}
 
-const enterDockingTime = async(bikeID, dateStr) => {
+const enterDockingInfo = async(bikeID, dateStr,userID,stationID) => {
   return db
   .from('DockedBikes')
-  .where('BikeID', '=', bikeID)
-  .update({
-    'DockingTime':dateStr
-  })
+  .where('BikeId',bikeID)
+  .update('DockingTime',dateStr)
+  .update('DockedBy',userID)
+  .update('StationId',stationID)
 }
 
-const enterDockedBy = async(bikeID, userID) => {
-  return db
-  .from('DockedBikes')
-  .where('BikeID', '=', bikeID)
-  .update({
-    'UserID':userID
-  })
-}
-
-const enterStationID = async(bikeID, stationID) => {
-  return db
-  .from('DockedBikes')
-  .where('BikeID', '=', bikeID)
-  .update({
-    'StationID':stationID
-  })
-}
-
-const enterToLocation = async(tripID, stationID) => {
+const updateTripDetails = async(tripID, stationID,dateStr,tripStatus,journeyBill,paymentStatus) => {
   return db
   .from('Trips')
-  .where('TripID', '=', tripID)
-  .update({
-    'ToLocation':stationID
-  })
+  .where('TripId',tripID)
+  .update('ToLocation',stationID)
+  .update('EndTime',dateStr)
+  .update('TripStatus',tripStatus)
+  .update('JourneyBill',journeyBill)
+  .update('PaymentStatus',paymentStatus)
 }
 
-const enterEndtime = async(tripID, dateStr) => {
+// const enterEndtime = async(tripID, dateStr) => {
+//   return db
+//   .from('Trips')
+//   .where('TripID', '=', tripID)
+//   .update({
+//     'Endtime':dateStr
+//   })
+// }
+
+// const enterTripStatus = async(tripID, tripStatus) => {
+//   return db
+//   .from('Trips')
+//   .where('TripID', '=', tripID)
+//   .update({
+//     'TripStatus':tripStatus
+//   })
+// }
+
+// const enterJourneyBill = async(tripID, journeyBill) => {
+//   return db
+//   .from('Trips')
+//   .where('TripID', '=', tripID)
+//   .update({
+//     'JourneyBill':journeyBill
+//   })
+// }
+
+// const enterPaymentStatus = async(tripID, paymentStatus) => {
+//   return db
+//   .from('Trips')
+//   .where('TripID', '=', tripID)
+//   .update({
+//     'PaymentStatus':paymentStatus
+//   })
+// }
+
+const getStartTime = async(tripID) => {
   return db
   .from('Trips')
-  .where('TripID', '=', tripID)
-  .update({
-    'Endtime':dateStr
+  .select('StartTime')
+  .where('TripId',tripID)
+  .then(rows => {
+    return rows[0]
   })
 }
-
-const enterTripStatus = async(tripID, tripStatus) => {
-  return db
-  .from('Trips')
-  .where('TripID', '=', tripID)
-  .update({
-    'TripStatus':tripStatus
-  })
-}
-
-const enterJourneyBill = async(tripID, journeyBill) => {
-  return db
-  .from('Trips')
-  .where('TripID', '=', tripID)
-  .update({
-    'JourneyBill':journeyBill
-  })
-}
-
-const enterPaymentStatus = async(tripID, paymentStatus) => {
-  return db
-  .from('Trips')
-  .where('TripID', '=', tripID)
-  .update({
-    'PaymentStatus':paymentStatus
-  })
-}
-
 
 module.exports = {
   AddBike,
@@ -210,5 +198,12 @@ module.exports = {
   getAvailableBikes,
   checkEmail,
   changeBikeStatus,
-  StartTrip
+  StartTrip,
+  getTripID,
+  deleteTripIDFromUsers,
+  getBikeID,
+  enterLastStationDocked,
+  enterDockingInfo,
+  updateTripDetails,
+  getStartTime
 };

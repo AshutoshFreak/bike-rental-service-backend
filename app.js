@@ -11,6 +11,7 @@ app.use(express.json());
 require("./routes/AddBike")(app);
 require("./routes/Login")(app);
 require("./routes/BookBike")(app);
+require("./routes/EndTrip")(app);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Bike Rental Service");

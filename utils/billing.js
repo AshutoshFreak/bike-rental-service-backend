@@ -1,5 +1,10 @@
-export function calculateJourneyBill(hours) {
+function calculateJourneyBill(hours) {
     perHourBill = 2;
-    totalBill = perHourBill*hours;
+    totalBill = Math.floor(perHourBill*hours);
     return totalBill
 };
+
+
+module.exports = {
+   calculateJourneyBill
+  };
