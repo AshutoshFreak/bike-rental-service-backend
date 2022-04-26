@@ -1,7 +1,7 @@
-require("dotenv").config({path: "./.env" });
+require("dotenv").config({ path: "./.env" });
 const express = require("express");
 const app = express();
-const {AddBike} = require("./db/db");
+const { AddBike } = require("./db/db");
 
 
 app.use(express.json());
@@ -66,10 +66,10 @@ app.post('/verifyOrder',  (req, res)=>{
 });
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Bike Rental Service");
+    res.send("Welcome to Bike Rental Service");
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 7000;
 app.listen(port, () => {
-  console.log(`listening on port ` + port);
+    console.log(`listening on port ` + port);
 });
