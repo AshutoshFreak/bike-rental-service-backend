@@ -1,0 +1,87 @@
+<!-- Inside index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8" />
+    <meta content=
+        "This is a demo of Web integration 
+        of Razorpay in NodeJS" 
+        author="Mr. Twinkle Sharma" />
+    <title>Razorpay Web-Integration</title>
+</head>
+  
+<body>
+    <hr/>
+    <h2>Advanced Data Structures & Algorithms Course</h2>
+    <h3>Description</h3>
+  
+    <ul>
+        <li>Best Course for SDE placements</li>
+        <li>
+            Available in 4 major Languages JAVA, 
+            C/C++, Python, Javascript
+        </li>
+        <li>Lifetime Access</li>
+    </ul>
+  
+    <span> Cost:- 499 Rupees 
+        <button id="pay-button" >
+            Pay Now & Get Access
+        </button> 
+    </span>
+    <hr/>
+  
+    <!-- Processing Payment Checkout -->
+    <!-- We will write code for payment here, 
+        Replace this comment with the code we 
+        are explaining below in step 5 of the 
+        article -->
+
+        <!--Inside index.html -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+   var options = {
+       "key": "FILL_KEY_ID_HERE", 
+       "amount": "49900", 
+       "currency": "INR",
+       "name": "Dummy Academy",
+       "description": "Pay & Checkout this Course, Upgrade your DSA Skill",
+      "image": "",
+       "order_id": "FILL_ORDER_ID_HERE",  
+       "handler": function (response){
+           console.log(response)
+           alert("This step of Payment Succeeded");
+       },
+       "prefill": {
+          //Here we are prefilling random contact
+         "contact":"9876543210", 
+           //name and email id, so while checkout
+         "name": "Twinkle Sharma",  
+         "email": "smtwinkle@gmail.com" 
+       },
+      "notes" : {
+         "description":"Best Course for SDE placements",
+         "language":`Available in 4 major Languages JAVA, 
+                     C/C++, Python, Javascript`,
+         "access":"This course have Lifetime Access"
+       }, 
+       "theme": {
+           "color": "#2300a3"
+       }
+   };
+   var razorpayObject = new Razorpay(options);
+   console.log(razorpayObject);
+   razorpayObject.on('payment.failed', function (response){
+         console.log(response);
+         alert("This step of Payment Failed");
+   });
+     
+   document.getElementById('pay-button').onclick = function(e){
+       razorpayObject.open();
+       e.preventDefault();
+   }
+</script>
+</body>
+  
+</html>
