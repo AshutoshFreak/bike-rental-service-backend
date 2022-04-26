@@ -244,6 +244,23 @@ const getBikesCount =async()=>{
   .count()
 }
 
+const updateUserDetails =async(userID,journeyBill)=>{
+  return db
+  .from('Users')
+  .where('UserId',userID)
+  .update('MoneyDue',journeyBill)
+}
+
+const getUserBill = async(userID) => {
+  return db
+  .from('Users')
+  .select('MoneyDue')
+  .where('UserId',userID)
+  .then(rows => {
+    return rows[0]
+  })
+}
+
 module.exports = {
   AddBike,
   AddDockedBike,
@@ -262,5 +279,7 @@ module.exports = {
   enterDockingInfo,
   updateTripDetails,
   getStartTime,
-  getBikesCount
+  getBikesCount,
+  updateUserDetails,
+  getUserBill
 };

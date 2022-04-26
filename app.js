@@ -13,6 +13,7 @@ require("./routes/Login")(app);
 require("./routes/BookBike")(app);
 require("./routes/EndTrip")(app);
 require("./routes/ShowAvailableBikes")(app);
+require("./routes/GetBill")(app);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Bike Rental Service");

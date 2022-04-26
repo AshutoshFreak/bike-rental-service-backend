@@ -5,7 +5,7 @@ require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const app = express();
 const {checkUserBookStatus, getTripID, deleteTripIDFromUsers, getBikeID,
-        changeBikeStatus, enterLastStationDocked, enterDockingInfo, getStartTime ,updateTripDetails, enterJourneyBill, enterPaymentStatus} = require("../db/db");
+        changeBikeStatus, enterLastStationDocked, enterDockingInfo, getStartTime ,updateTripDetails, enterJourneyBill, enterPaymentStatus,updateUserDetails} = require("../db/db");
 const moment = require('moment');
 
 
@@ -51,8 +51,7 @@ module.exports = function (app) {
         hours = TimeDiffInHours(journeyStartTime,dateStrNoTimeZone);
         let journeyBill = calculateJourneyBill(hours);
         await updateTripDetails(tripID, stationID,dateStr,2,journeyBill,0); // station ID, timestamp,tripstatus,bill,payment status
-        
-
+        await updateUserDetails(userID,jouneyBill); //Updates Trip Bill on User Table
         // in SessionsPassword table
         // password should expire after trip has ended
         // expirePassword(tripID);
