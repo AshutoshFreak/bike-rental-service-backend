@@ -321,5 +321,6 @@ module.exports = {
     updateUserDetails,
     getUserBill,
     getStationLocations,
-    AddmailID
+    AddmailID,
+    getUserMoneyDue
 };
