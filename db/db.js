@@ -234,6 +234,16 @@ const getStartTime = async(tripID) => {
   })
 }
 
+const getBikesCount =async()=>{
+  return db
+  .from('Bikes')
+  .where('BikeStatus',0)
+  .join('Stations','Stations.StationId','Bikes.LastStationDocked')
+  .select('Bikes.LastStationDocked','Stations.StationName')
+  .groupBy('LastStationDocked','StationName')
+  .count()
+}
+
 module.exports = {
   AddBike,
   AddDockedBike,
@@ -251,5 +261,6 @@ module.exports = {
   enterLastStationDocked,
   enterDockingInfo,
   updateTripDetails,
-  getStartTime
+  getStartTime,
+  getBikesCount
 };
