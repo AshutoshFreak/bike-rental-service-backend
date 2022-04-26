@@ -17,7 +17,7 @@ module.exports = function (app) {
     if(bill!=undefined){
         res.status(200).send(bill);
     }else{
-        res.status(200).send("User not found")
+        res.status(200).send("User not found");
     }
   })
 

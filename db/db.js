@@ -261,6 +261,15 @@ const getUserBill = async(userID) => {
   })
 }
 
+const getStationLocations = async() => {
+  return db
+  .from('Stations')
+  .select('StationId','Location')
+  .then(rows => {
+    return rows;
+  })
+}
+
 module.exports = {
   AddBike,
   AddDockedBike,
@@ -281,5 +290,6 @@ module.exports = {
   getStartTime,
   getBikesCount,
   updateUserDetails,
-  getUserBill
+  getUserBill,
+  getStationLocations
 };
