@@ -8,11 +8,14 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      host:'bike-rental.c5wl4d118ddp.ap-south-1.rds.amazonaws.com',
+      host:'ec2-63-35-156-160.eu-west-1.compute.amazonaws.com',
       port : 5432,
-      database: 'bike_rental',
-      user:     'postgres',
-      password: 'test1234'
+      database: 'd35ck4b1r6kfg1',
+      user:     'xbwtktppilbtmt',
+      password: '9ff5ba2a35afc3c12aaf9fe800261915925b569978f873a262cf5fcfd642cac5',
+      ssl: {
+        rejectUnauthorized: false
+      }
     },
     pool: {
       min: 2,
