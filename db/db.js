@@ -299,6 +299,24 @@ const getUserMoneyDue = async(userID) => {
   })
 }
 
+const getRideHistory = async(userID) => {
+    return db
+    .from('Trips')
+    .select('BookedAtStation','BikeBooked','StartTime','EndTime','JourneyBill','ToLocation')
+    .where('UserId',userID)
+    .andWhere('TripStatus',2)
+  }
+
+const getStationNames = async(stationID) => {
+    return db
+    .from('Stations')
+    .select('StationName')
+    .where('StationId',stationID)
+    .then(rows => {
+        return rows[0]["StationName"];
+    })
+}
+
 module.exports = {
     AddBike,
     AddDockedBike,
@@ -322,5 +340,7 @@ module.exports = {
     getUserBill,
     getStationLocations,
     AddmailID,
-    getUserMoneyDue
+    getUserMoneyDue,
+    getRideHistory,
+    getStationNames
 };

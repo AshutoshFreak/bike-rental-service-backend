@@ -15,6 +15,7 @@ require("./routes/EndTrip")(app);
 require("./routes/ShowAvailableBikes")(app);
 require("./routes/GetBill")(app);
 require("./routes/GetUserInfo")(app);
+require("./routes/RideHistory")(app);
 
 const Razorpay = require('razorpay'); 
 
