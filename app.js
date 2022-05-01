@@ -3,6 +3,9 @@ const express = require("express");
 const app = express();
 const { AddBike } = require("./db/db");
 
+var cors = require('cors')
+
+app.use(cors())
 
 app.use(express.json());
 app.use(express.static('public'))
@@ -15,6 +18,7 @@ require("./routes/EndTrip")(app);
 require("./routes/ShowAvailableBikes")(app);
 require("./routes/GetBill")(app);
 require("./routes/GetUserInfo")(app);
+require("./routes/RideHistory")(app);
 
 const Razorpay = require('razorpay'); 
 
