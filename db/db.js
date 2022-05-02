@@ -317,6 +317,26 @@ const getStationNames = async(stationID) => {
     })
 }
 
+const insertUser = async(email,firebaseID) => {
+    return db
+        .from('Users')
+        .returning("*")
+        .where('EmailId', email)
+        .andWhere('FirebaseId',firebaseID)
+        .then(rows => {
+            if (rows.length == 0) {
+                return db
+                    .insert({ 'EmailId': email, 'FirebaseId': firebaseID,'MoneyDue':0 })
+                    .into("Users")
+                    .returning('*')
+                        
+                    
+            } else {
+                return rows;
+            }
+        });
+}
+
 module.exports = {
     AddBike,
     AddDockedBike,
@@ -342,5 +362,6 @@ module.exports = {
     AddmailID,
     getUserMoneyDue,
     getRideHistory,
-    getStationNames
+    getStationNames,
+    insertUser
 };

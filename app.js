@@ -19,6 +19,7 @@ require("./routes/ShowAvailableBikes")(app);
 require("./routes/GetBill")(app);
 require("./routes/GetUserInfo")(app);
 require("./routes/RideHistory")(app);
+require("./routes/UserHandle")(app);
 
 const Razorpay = require("razorpay");
 
